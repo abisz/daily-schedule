@@ -1,0 +1,26 @@
+{
+  "name": "daily-schedule",
+  "version": "0.0.0",
+  "description": "Command line tool for overviewing Google Calendar events",
+  "main": "./src/index.js",
+  "repository": {
+    "url": "https://github.com/abisz/daily-schedule.git",
+    "type": "git"
+  },
+  "scripts": {
+    "start": "node ./src/index.js",
+    "lint": "eslint --cache ./src",
+    "precommit": "npm run lint"
+  },
+  "bin": {
+    "daily": "./src/index.js"
+  },
+  "author": "Simon Reinsperger",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^3.15.0",
+    "eslint-config-airbnb-base": "^11.1.0",
+    "eslint-plugin-import": "^2.2.0",
+    "husky": "^0.13.1"
+  }
+}
