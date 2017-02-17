@@ -3,6 +3,7 @@
 const Calenduh = require('calenduh');
 const debug = require('debug')('daily-schedule');
 const moment = require('moment');
+const chalk = require('chalk');
 
 const cal = new Calenduh(`${__dirname}/../client_secret.json`);
 
@@ -14,7 +15,8 @@ cal.allEvents({
   sorted.forEach((e) => {
     const time = `(${moment(e.start.dateTime).format('HH:mm')}-${moment(e.end.dateTime).format('HH:mm')})`;
     const line = `${e.summary} ${time}`;
-    process.stdout.write(`${line}\n`);
+    const color = moment(e.start.dateTime) < moment() ? chalk.gray : chalk.dim;
+    process.stdout.write(color(`${line}\n`));
   });
 })
   .catch((err) => {
