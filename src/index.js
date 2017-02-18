@@ -4,15 +4,28 @@ const Calenduh = require('calenduh');
 const debug = require('debug')('daily-schedule');
 const moment = require('moment');
 const chalk = require('chalk');
+const program = require('commander');
+const app = require('../package.json');
 
 const cal = new Calenduh(`${__dirname}/../client_secret.json`);
 
+program
+  .version(app.version)
+  .option('-t, --tomorrow', 'Show schedule of tomorrow')
+  .parse(process.argv);
+
+const day = program.tomorrow ? moment().add(1, 'day') : moment();
+const start = day.startOf('day').toISOString();
+const end = day.endOf('day').toISOString();
+
 cal.allEvents({
-  timeMin: moment().startOf('day').toISOString(),
-  timeMax: moment().endOf('day').toISOString(),
+  timeMin: start,
+  timeMax: end,
 }).then((events) => {
   if (events.length === 0) {
-    process.stdout.write('No Events for today!\n');
+    debug('No events');
+    process.stdout.write(`No events for ${program.tomorrow ? 'tomorrow' : 'today'}!\n`);
+    process.exit();
   }
   const sorted = events.sort((a, b) => moment(a.start.dateTime) - moment(b.end.dateTime));
   sorted.forEach((e) => {
