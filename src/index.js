@@ -11,11 +11,14 @@ cal.allEvents({
   timeMin: moment().startOf('day').toISOString(),
   timeMax: moment().endOf('day').toISOString(),
 }).then((events) => {
+  if (events.length === 0) {
+    process.stdout.write('No Events for today!\n');
+  }
   const sorted = events.sort((a, b) => moment(a.start.dateTime) - moment(b.end.dateTime));
   sorted.forEach((e) => {
     const time = `(${moment(e.start.dateTime).format('HH:mm')}-${moment(e.end.dateTime).format('HH:mm')})`;
     const line = `${e.summary} ${time}`;
-    const color = moment(e.start.dateTime) < moment() ? chalk.gray : chalk.dim;
+    const color = moment(e.start.dateTime) < moment() ? chalk.dim : chalk.white;
     process.stdout.write(color(`${line}\n`));
   });
 })
