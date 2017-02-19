@@ -48,10 +48,15 @@ cal.allEvents({
 
   process.stdout.write(chalk.white.underline(`Schedule for ${dayString}:\n`));
 
-  const sorted = events.sort((a, b) => moment(a.start.dateTime) - moment(b.end.dateTime));
+  const sorted = events.sort((a, b) => {
+    // push whole day events to the top
+    if (!a.start.dateTime) return -1;
+    if (!b.start.dateTime) return 1;
+    return moment(a.start.dateTime) - moment(b.end.dateTime);
+  });
   sorted.forEach((e) => {
     const time = `(${moment(e.start.dateTime).format('HH:mm')}-${moment(e.end.dateTime).format('HH:mm')})`;
-    const line = `${e.summary} ${time}`;
+    const line = `${e.summary} ${e.start.dateTime ? time : ''}`;
     const color = today && moment(e.start.dateTime) < moment() ? chalk.dim : chalk.white;
     process.stdout.write(color(`${line}\n`));
   });
