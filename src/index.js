@@ -13,6 +13,7 @@ program
   .version(app.version)
   .option('-t, --tomorrow', 'Show schedule of tomorrow')
   .option('-d, --date [date]', 'Show schedule of specific date')
+  .option('-l, --location', 'Show location of events if available')
   .parse(process.argv);
 
 const today = !program.tomorrow && !program.date;
@@ -52,11 +53,12 @@ cal.allEvents({
     // push whole day events to the top
     if (!a.start.dateTime) return -1;
     if (!b.start.dateTime) return 1;
-    return moment(a.start.dateTime) - moment(b.end.dateTime);
+    return moment(a.start.dateTime) - moment(b.start.dateTime);
   });
   sorted.forEach((e) => {
     const time = `(${moment(e.start.dateTime).format('HH:mm')}-${moment(e.end.dateTime).format('HH:mm')})`;
-    const line = `${e.summary} ${e.start.dateTime ? time : ''}`;
+    const location = `${e.location || ''}`;
+    const line = `${e.summary} ${e.start.dateTime ? time : ''} ${program.location ? location : ''}`;
     const color = today && moment(e.start.dateTime) < moment() ? chalk.dim : chalk.white;
     process.stdout.write(color(`${line}\n`));
   });
