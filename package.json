@@ -24,7 +24,7 @@
     "husky": "^0.13.1"
   },
   "dependencies": {
-    "calenduh": "^1.1.0",
+    "calenduh": "1.5.0",
     "chalk": "^1.1.3",
     "commander": "^2.9.0",
     "debug": "^2.6.1",
